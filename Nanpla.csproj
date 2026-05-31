@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks Condition="'$(BuildingForAndroid)' == 'true'">net8.0-android;net8.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks Condition="'$(BuildingForAndroid)' != 'true'">net8.0-windows10.0.19041.0</TargetFrameworks>
+		<OutputType>Exe</OutputType>
+		<UseMaui>true</UseMaui>
+		<WindowsPackageType>None</WindowsPackageType>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<!-- Display name -->
+		<ApplicationTitle>NUMPLA-AI Photo Book</ApplicationTitle>
+
+		<!-- App Identifier -->
+		<ApplicationId>com.companyname.numpla_ai_photobook</ApplicationId>
+
+		<!-- Versions -->
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
+
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::IsOSPlatform('windows'))">10.0.17763.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::IsOSPlatform('android'))">23.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::IsOSPlatform('windows'))">10.0.17763.0</TargetPlatformMinVersion>
+
+		<AssemblyName>Nanpla</AssemblyName>
+		<RootNamespace>Nanpla</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Android Asset support & Windows Copy support -->
+		<MauiAsset Include="photo\**" />
+		<None Update="photo\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.100" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.100" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+		<PackageReference Include="Plugin.MauiMTAdmob" Version="2.0.1.1" />
+	</ItemGroup>
+
+</Project>

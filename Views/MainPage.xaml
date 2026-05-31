@@ -1,0 +1,300 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Nanpla.ViewModels"
+             xmlns:models="clr-namespace:Nanpla.Models"
+             xmlns:converters="clr-namespace:Nanpla.Converters"
+             x:Class="Nanpla.Views.MainPage"
+             Title="NUMPLA-AI Game"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:NoteVisibleConverter x:Key="NoteVisibleConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.BindingContext>
+        <viewmodels:GameViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid>
+        <!-- 1. Background Image -->
+        <Image Source="{Binding BackgroundImageSource}"
+               Aspect="AspectFill"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill" />
+
+        <!-- 2. 縺ｼ縺九＠貍泌・逕ｨ蜊企€乗・繝ｬ繧､繝､繝ｼ (繧ｲ繝ｼ繝荳ｭON縲√け繝ｪ繧｢譎０FF) -->
+        <BoxView BackgroundColor="#D5111B24"
+                 HorizontalOptions="Fill"
+                 VerticalOptions="Fill">
+            <BoxView.Triggers>
+                <DataTrigger TargetType="BoxView" Binding="{Binding IsBlurred}" Value="False">
+                    <Setter Property="Opacity" Value="0" />
+                </DataTrigger>
+            </BoxView.Triggers>
+        </BoxView>
+
+        <!-- 3. 繝｡繧､繝ｳUI繧ｳ繝ｳ繝・Φ繝・-->
+        <Grid RowDefinitions="Auto, Auto, *, Auto" Padding="20">
+            
+            <!-- Banner Ad Container (Top) -->
+            <ContentView x:Name="AdContainer"
+                         Grid.Row="0"
+                         HeightRequest="50"
+                         HorizontalOptions="Center"
+                         Margin="0,0,0,10" />
+
+            <!-- ヘッダーエリア (タイトルへ戻る、難易度表示) -->
+            <Grid Grid.Row="1" ColumnDefinitions="Auto, *, Auto" VerticalOptions="Center">
+                <Button Grid.Column="0"
+                        Text="← Title"
+                        Command="{Binding GoToTitleCommand}"
+                        BackgroundColor="#30FFFFFF"
+                        TextColor="White"
+                        CornerRadius="15"
+                        Padding="15,5"
+                        FontAttributes="Bold" />
+                
+                <Label Grid.Column="1"
+                       Text="{Binding DifficultyText}"
+                       TextColor="White"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Grid>
+
+            <!-- ナンプレ盤面 (グラスモーフィズム風) -->
+            <Grid Grid.Row="2" HorizontalOptions="Center" VerticalOptions="Center" Padding="10">
+                
+                <!-- 盤面の背景（半透明ガラス） -->
+                <Border WidthRequest="421"
+                        HeightRequest="421"
+                        StrokeThickness="2"
+                        Stroke="#40FFFFFF"
+                        Background="#20FFFFFF"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="35"
+                        Margin="0">
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding IsGameWonInternal}" Value="True">
+                            <Setter Property="Opacity" Value="0" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Offset="0,10" Radius="15" Opacity="0.5" />
+                    </Border.Shadow>
+                    
+                    <Grid>
+                        <!-- 81個のマス目 (FlexLayoutを使って自動余白によるズレを完全排除) -->
+                        <FlexLayout BindableLayout.ItemsSource="{Binding FlattenedCells}"
+                                    Wrap="Wrap"
+                                    Direction="Row"
+                                    JustifyContent="Start"
+                                    AlignItems="Start"
+                                    AlignContent="Start"
+                                    Margin="0"
+                                    WidthRequest="351"
+                                    HeightRequest="351"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <!-- セルの外枠 (極細グレー) -->
+                                    <Border StrokeThickness="0.5"
+                                            Stroke="#30FFFFFF"
+                                            WidthRequest="39"
+                                            HeightRequest="39"
+                                            Background="#05FFFFFF"
+                                            Padding="0">
+                                        
+                                        <Border.Triggers>
+                                            <DataTrigger TargetType="Border" Binding="{Binding IsOriginal}" Value="True">
+                                                <Setter Property="Background" Value="#15000000" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
+                                                <Setter Property="Background" Value="#6000E5FF" />
+                                            </DataTrigger>
+                                        </Border.Triggers>
+
+                                        <!-- セルタップ認識 & コンテンツ表示 -->
+                                        <Grid Padding="0">
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="OnCellTapped" />
+                                            </Grid.GestureRecognizers>
+                                            
+                                            <!-- 確定値の表示 (0以外のとき表示) -->
+                                            <Label Text="{Binding Value}"
+                                                   FontSize="22"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"
+                                                   IsVisible="False">
+                                                <Label.Triggers>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding IsEmpty}" Value="False">
+                                                        <Setter Property="IsVisible" Value="True" />
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding IsOriginal}" Value="True">
+                                                        <Setter Property="TextColor" Value="White" />
+                                                        <Setter Property="FontAttributes" Value="Bold" />
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding IsOriginal}" Value="False">
+                                                        <Setter Property="TextColor" Value="#80DEEA" />
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding IsError}" Value="True">
+                                                        <Setter Property="TextColor" Value="#FF5252" />
+                                                    </DataTrigger>
+                                                </Label.Triggers>
+                                            </Label>
+                                            
+                                            <!-- 仮入力メモグリッド (IsEmpty == true のときのみ表示) -->
+                                            <Grid IsVisible="{Binding IsEmpty}"
+                                                  RowDefinitions="*,*,*"
+                                                  ColumnDefinitions="*,*,*"
+                                                  Padding="2">
+                                                <Label Grid.Row="0" Grid.Column="0" Text="1" IsVisible="{Binding Note1}" FontSize="9" TextColor="#B0BEC5" HorizontalOptions="Center" VerticalOptions="Center" />
+                                                <Label Grid.Row="0" Grid.Column="1" Text="2" IsVisible="{Binding Note2}" FontSize="9" TextColor="#B0BEC5" HorizontalOptions="Center" VerticalOptions="Center" />
+                                                <Label Grid.Row="0" Grid.Column="2" Text="3" IsVisible="{Binding Note3}" FontSize="9" TextColor="#B0BEC5" HorizontalOptions="Center" VerticalOptions="Center" />
+                                                <Label Grid.Row="1" Grid.Column="0" Text="4" IsVisible="{Binding Note4}" FontSize="9" TextColor="#B0BEC5" HorizontalOptions="Center" VerticalOptions="Center" />
+                                                <Label Grid.Row="1" Grid.Column="1" Text="5" IsVisible="{Binding Note5}" FontSize="9" TextColor="#B0BEC5" HorizontalOptions="Center" VerticalOptions="Center" />
+                                                <Label Grid.Row="1" Grid.Column="2" Text="6" IsVisible="{Binding Note6}" FontSize="9" TextColor="#B0BEC5" HorizontalOptions="Center" VerticalOptions="Center" />
+                                                <Label Grid.Row="2" Grid.Column="0" Text="7" IsVisible="{Binding Note7}" FontSize="9" TextColor="#B0BEC5" HorizontalOptions="Center" VerticalOptions="Center" />
+                                                <Label Grid.Row="2" Grid.Column="1" Text="8" IsVisible="{Binding Note8}" FontSize="9" TextColor="#B0BEC5" HorizontalOptions="Center" VerticalOptions="Center" />
+                                                <Label Grid.Row="2" Grid.Column="2" Text="9" IsVisible="{Binding Note9}" FontSize="9" TextColor="#B0BEC5" HorizontalOptions="Center" VerticalOptions="Center" />
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
+
+                        <!-- 3x3ブロックの太線枠（CollectionViewと同一サイズに指定してズレを解消） -->
+                        <Grid RowDefinitions="*,*,*" ColumnDefinitions="*,*,*" 
+                               InputTransparent="True"
+                               WidthRequest="351"
+                               HeightRequest="351"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center">
+                            <Border Grid.Row="0" Grid.Column="0" StrokeThickness="1.5" Stroke="#80FFFFFF" Background="Transparent" />
+                            <Border Grid.Row="0" Grid.Column="1" StrokeThickness="1.5" Stroke="#80FFFFFF" Background="Transparent" />
+                            <Border Grid.Row="0" Grid.Column="2" StrokeThickness="1.5" Stroke="#80FFFFFF" Background="Transparent" />
+                            <Border Grid.Row="1" Grid.Column="0" StrokeThickness="1.5" Stroke="#80FFFFFF" Background="Transparent" />
+                            <Border Grid.Row="1" Grid.Column="1" StrokeThickness="1.5" Stroke="#80FFFFFF" Background="Transparent" />
+                            <Border Grid.Row="1" Grid.Column="2" StrokeThickness="1.5" Stroke="#80FFFFFF" Background="Transparent" />
+                            <Border Grid.Row="2" Grid.Column="0" StrokeThickness="1.5" Stroke="#80FFFFFF" Background="Transparent" />
+                            <Border Grid.Row="2" Grid.Column="1" StrokeThickness="1.5" Stroke="#80FFFFFF" Background="Transparent" />
+                            <Border Grid.Row="2" Grid.Column="2" StrokeThickness="1.5" Stroke="#80FFFFFF" Background="Transparent" />
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- テンキー & 入力切り替えコントロール -->
+            <VerticalStackLayout Grid.Row="3" Spacing="15" Margin="0,10,0,0">
+                <VerticalStackLayout.Triggers>
+                    <DataTrigger TargetType="VerticalStackLayout" Binding="{Binding IsGameWonInternal}" Value="True">
+                        <Setter Property="Opacity" Value="0" />
+                    </DataTrigger>
+                </VerticalStackLayout.Triggers>
+                <FlexLayout Wrap="Wrap" JustifyContent="Center" AlignContent="Center">
+                    <Button Text="1" Command="{Binding InputNumberCommand}" CommandParameter="1" Margin="3" WidthRequest="48" HeightRequest="48" CornerRadius="8" BackgroundColor="#25FFFFFF" TextColor="White" FontSize="18" FontAttributes="Bold" />
+                    <Button Text="2" Command="{Binding InputNumberCommand}" CommandParameter="2" Margin="3" WidthRequest="48" HeightRequest="48" CornerRadius="8" BackgroundColor="#25FFFFFF" TextColor="White" FontSize="18" FontAttributes="Bold" />
+                    <Button Text="3" Command="{Binding InputNumberCommand}" CommandParameter="3" Margin="3" WidthRequest="48" HeightRequest="48" CornerRadius="8" BackgroundColor="#25FFFFFF" TextColor="White" FontSize="18" FontAttributes="Bold" />
+                    <Button Text="4" Command="{Binding InputNumberCommand}" CommandParameter="4" Margin="3" WidthRequest="48" HeightRequest="48" CornerRadius="8" BackgroundColor="#25FFFFFF" TextColor="White" FontSize="18" FontAttributes="Bold" />
+                    <Button Text="5" Command="{Binding InputNumberCommand}" CommandParameter="5" Margin="3" WidthRequest="48" HeightRequest="48" CornerRadius="8" BackgroundColor="#25FFFFFF" TextColor="White" FontSize="18" FontAttributes="Bold" />
+                    <Button Text="6" Command="{Binding InputNumberCommand}" CommandParameter="6" Margin="3" WidthRequest="48" HeightRequest="48" CornerRadius="8" BackgroundColor="#25FFFFFF" TextColor="White" FontSize="18" FontAttributes="Bold" />
+                    <Button Text="7" Command="{Binding InputNumberCommand}" CommandParameter="7" Margin="3" WidthRequest="48" HeightRequest="48" CornerRadius="8" BackgroundColor="#25FFFFFF" TextColor="White" FontSize="18" FontAttributes="Bold" />
+                    <Button Text="8" Command="{Binding InputNumberCommand}" CommandParameter="8" Margin="3" WidthRequest="48" HeightRequest="48" CornerRadius="8" BackgroundColor="#25FFFFFF" TextColor="White" FontSize="18" FontAttributes="Bold" />
+                    <Button Text="9" Command="{Binding InputNumberCommand}" CommandParameter="9" Margin="3" WidthRequest="48" HeightRequest="48" CornerRadius="8" BackgroundColor="#25FFFFFF" TextColor="White" FontSize="18" FontAttributes="Bold" />
+                </FlexLayout>
+
+                <Grid ColumnDefinitions="*, *" ColumnSpacing="20" WidthRequest="320" HorizontalOptions="Center">
+                    <Button Grid.Column="0"
+                            Text="{Binding NoteModeText}" 
+                            Command="{Binding ToggleNoteModeCommand}"
+                            HeightRequest="45"
+                            CornerRadius="22"
+                            FontAttributes="Bold"
+                            TextColor="White">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding IsNoteMode}" Value="True">
+                                <Setter Property="BackgroundColor" Value="#FF9800" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="Button" Binding="{Binding IsNoteMode}" Value="False">
+                                <Setter Property="BackgroundColor" Value="#1E88E5" />
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+
+                    <Button Grid.Column="1"
+                            Text="Erase"
+                            Command="{Binding ClearCommand}"
+                            BackgroundColor="#5F7C8A"
+                            TextColor="White"
+                            HeightRequest="45"
+                            CornerRadius="22"
+                            FontAttributes="Bold" />
+                </Grid>
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- 4. クリアお祝いオーバーレイ -->
+        <Grid BackgroundColor="#AA000000"
+              IsVisible="{Binding IsShowCongratsModal}"
+              HorizontalOptions="Fill"
+              VerticalOptions="Fill">
+            
+            <Border HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    WidthRequest="320"
+                    HeightRequest="240"
+                    Padding="25"
+                    StrokeThickness="1"
+                    Stroke="#50FFFFFF"
+                    Background="#EF102027"
+                    StrokeShape="RoundRectangle 20">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ShowImageOnlyCommand}" />
+                </Border.GestureRecognizers>
+                <Border.Shadow>
+                    <Shadow Brush="Black" Offset="0,15" Radius="20" Opacity="0.7" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="20" VerticalOptions="Center">
+                    <Label Text="★ Game Clear!"
+                           FontSize="28"
+                           FontAttributes="Bold"
+                           TextColor="#FFD700"
+                           HorizontalOptions="Center" />
+
+                    <Label Text="{Binding CongratsMessage}"
+                           TextColor="White"
+                           FontSize="14"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"
+                           LineHeight="1.4" />
+
+                    <Button Text="View Image"
+                            Command="{Binding ShowImageOnlyCommand}"
+                            BackgroundColor="#00ACC1"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            HeightRequest="45"
+                            CornerRadius="22"
+                            WidthRequest="180" />
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+        <!-- 画像のみプレビュー時の全画面タップ検出用レイヤー -->
+        <Grid BackgroundColor="Transparent"
+              IsVisible="{Binding IsShowOnlyImage}"
+              InputTransparent="False"
+              HorizontalOptions="Fill"
+              VerticalOptions="Fill">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding PageTapCommand}" />
+            </Grid.GestureRecognizers>
+        </Grid>
+    </Grid>
+</ContentPage>

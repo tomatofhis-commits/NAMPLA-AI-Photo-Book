@@ -1,0 +1,10 @@
+# [gitignore] .NET / Visual Studio
+[Bb]in/
+[Oo]bj/
+[Tt]mp/
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.sln.docstates

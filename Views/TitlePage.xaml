@@ -1,0 +1,125 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Nanpla.ViewModels"
+             xmlns:models="clr-namespace:Nanpla.Models"
+             x:Class="Nanpla.Views.TitlePage"
+             Title="NUMPLA-AI Photo Book"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.BindingContext>
+        <viewmodels:TitleViewModel />
+    </ContentPage.BindingContext>
+
+    <!-- Title Layout -->
+    <Grid RowDefinitions="*, Auto">
+        <!-- 1. Background Image -->
+        <Image Grid.Row="0"
+               Source="{Binding BackgroundImageSource}"
+               Aspect="AspectFill"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill" />
+
+        <!-- 2. Dark Overlay Mask (D5111B24 - semi-transparent black for high readability) -->
+        <BoxView Grid.Row="0"
+                 BackgroundColor="#D5111B24"
+                 HorizontalOptions="Fill"
+                 VerticalOptions="Fill" />
+
+        <VerticalStackLayout Grid.Row="0"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Spacing="40"
+                             Padding="30">
+            <!-- Title Logo -->
+            <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                <Label Text="NUMPLA-AI Photo Book"
+                       FontSize="32"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       CharacterSpacing="1">
+                    <Label.Shadow>
+                        <Shadow Brush="Black" Offset="2,2" Radius="5" Opacity="0.5" />
+                    </Label.Shadow>
+                </Label>
+                <Label Text="Yukata Ladys"
+                       FontSize="18"
+                       TextColor="#81D4FA"
+                       HorizontalOptions="Center"
+                       CharacterSpacing="2"
+                       FontAttributes="Italic" />
+            </VerticalStackLayout>
+
+            <!-- Difficulty Selection Border (Glassmorphism style) -->
+            <Border StrokeThickness="1"
+                    Stroke="#30FFFFFF"
+                    Background="#15FFFFFF"
+                    Padding="30"
+                    WidthRequest="350"
+                    StrokeShape="RoundRectangle 20">
+                <VerticalStackLayout Spacing="25">
+                    
+                    <Label Text="Select Difficulty"
+                           FontSize="18"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold" />
+
+                    <!-- Difficulty Buttons -->
+                    <VerticalStackLayout Spacing="12">
+                        <Button Text="Easy"
+                                Command="{Binding StartGameCommand}"
+                                CommandParameter="{x:Static models:Difficulty.Easy}"
+                                BackgroundColor="#2E7D32"
+                                TextColor="White"
+                                FontSize="16"
+                                FontAttributes="Bold"
+                                HeightRequest="50"
+                                CornerRadius="10" />
+
+                        <Button Text="Medium"
+                                Command="{Binding StartGameCommand}"
+                                CommandParameter="{x:Static models:Difficulty.Medium}"
+                                BackgroundColor="#F57C00"
+                                TextColor="White"
+                                FontSize="16"
+                                FontAttributes="Bold"
+                                HeightRequest="50"
+                                CornerRadius="10" />
+
+                        <Button Text="Hard"
+                                Command="{Binding StartGameCommand}"
+                                CommandParameter="{x:Static models:Difficulty.Hard}"
+                                BackgroundColor="#C62828"
+                                TextColor="White"
+                                FontSize="16"
+                                FontAttributes="Bold"
+                                HeightRequest="50"
+                                CornerRadius="10" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Album Navigation Button -->
+            <Button Text="🏆 Reward Album"
+                    Command="{Binding OpenAlbumCommand}"
+                    BackgroundColor="#00ACC1"
+                    TextColor="White"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    WidthRequest="250"
+                    HeightRequest="50"
+                    CornerRadius="25">
+                <Button.Shadow>
+                    <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.3" />
+                </Button.Shadow>
+            </Button>
+        </VerticalStackLayout>
+
+        <!-- Banner Ad Container (Bottom) -->
+        <ContentView x:Name="AdContainer"
+                     Grid.Row="1"
+                     HeightRequest="50"
+                     HorizontalOptions="Center" />
+    </Grid>
+</ContentPage>

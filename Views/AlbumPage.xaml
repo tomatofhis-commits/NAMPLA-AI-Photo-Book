@@ -1,0 +1,157 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Nanpla.ViewModels"
+             x:Class="Nanpla.Views.AlbumPage"
+             x:Name="AlbumPageName"
+             Title="Reward Album"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.BindingContext>
+        <viewmodels:AlbumViewModel />
+    </ContentPage.BindingContext>
+
+    <!-- 閭梧勹繧ｰ繝ｩ繝・・繧ｷ繝ｧ繝ｳ -->
+    <Grid RowDefinitions="Auto, *, Auto">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#0F2027" Offset="0.0" />
+                <GradientStop Color="#203A43" Offset="0.5" />
+                <GradientStop Color="#2C5364" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto" Padding="20, 15" BackgroundColor="#15000000">
+            <Button Grid.Column="0"
+                    Text="← Back"
+                    Command="{Binding GoToTitleCommand}"
+                    BackgroundColor="#30FFFFFF"
+                    TextColor="White"
+                    FontSize="14"
+                    FontAttributes="Bold"
+                    CornerRadius="15"
+                    Padding="15,5" />
+            <Label Grid.Column="1"
+                   Text="Reward Album"
+                   TextColor="White"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+        </Grid>
+
+        <!-- Image Gallery -->
+        <CollectionView x:Name="AlbumCollectionView"
+                        Grid.Row="1"
+                        Margin="20,10,20,10"
+                        ItemsSource="{Binding AlbumItems}"
+                        Scrolled="CollectionView_Scrolled">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="4" HorizontalItemSpacing="15" VerticalItemSpacing="15" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <!-- Card Frame -->
+                    <Border StrokeThickness="1"
+                            Stroke="#20FFFFFF"
+                            Background="#10FFFFFF"
+                            HeightRequest="150"
+                            StrokeShape="RoundRectangle 12">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BindingContext.PreviewImageCommand, Source={x:Reference AlbumPageName}}"
+                                                  CommandParameter="{Binding .}" />
+                        </Border.GestureRecognizers>
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Offset="0,4" Radius="5" Opacity="0.3" />
+                        </Border.Shadow>
+
+                        <Grid>
+                            <!-- Unlocked Image (Visible when Unlocked) -->
+                            <Image Source="{Binding ImageSource}"
+                                   Aspect="AspectFill"
+                                   IsVisible="False"
+                                   HorizontalOptions="Fill"
+                                   VerticalOptions="Fill">
+                                <Image.Triggers>
+                                    <DataTrigger TargetType="Image" Binding="{Binding IsUnlocked}" Value="True">
+                                        <Setter Property="IsVisible" Value="True" />
+                                    </DataTrigger>
+                                </Image.Triggers>
+                            </Image>
+
+                            <!-- Locked State (Visible when Locked) -->
+                            <Grid BackgroundColor="#D0111A24"
+                                  IsVisible="True"
+                                  Padding="10">
+                                <Grid.Triggers>
+                                    <DataTrigger TargetType="Grid" Binding="{Binding IsUnlocked}" Value="True">
+                                        <Setter Property="IsVisible" Value="False" />
+                                    </DataTrigger>
+                                </Grid.Triggers>
+
+                                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="8">
+                                    <Label Text="{Binding NumberText}"
+                                           FontSize="20"
+                                           TextColor="White"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center" />
+                                    <Label Text="Locked"
+                                           FontSize="12"
+                                           TextColor="#B0BEC5"
+                                           HorizontalOptions="Center" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Seek Bar (Footer) -->
+        <Grid Grid.Row="2"
+              ColumnDefinitions="*, Auto"
+              Padding="20,10"
+              BackgroundColor="#20000000">
+            <Slider x:Name="AlbumSlider"
+                    Minimum="0"
+                    Maximum="0"
+                    Value="0"
+                    MinimumTrackColor="#00E5FF"
+                    MaximumTrackColor="#40FFFFFF"
+                    ThumbColor="#00E5FF"
+                    VerticalOptions="Center"
+                    ValueChanged="AlbumSlider_ValueChanged" />
+            <Label x:Name="IndexLabel"
+                   Grid.Column="1"
+                   Text="0 / 0"
+                   TextColor="White"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   Margin="15,0,0,0" />
+        </Grid>
+
+        <!-- Image Preview Overlay -->
+        <Grid Grid.Row="0" Grid.RowSpan="3"
+              BackgroundColor="#F0000000"
+              IsVisible="{Binding IsPreviewVisible}"
+              InputTransparent="False">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ClosePreviewCommand}" />
+            </Grid.GestureRecognizers>
+
+            <Image Source="{Binding PreviewImageSource}"
+                   Aspect="AspectFit"
+                   HorizontalOptions="Fill"
+                   VerticalOptions="Fill"
+                   Margin="20" />
+
+            <Label Text="✕ Close (Tap to close)"
+                   TextColor="White"
+                   FontSize="14"
+                   HorizontalOptions="Center"
+                   VerticalOptions="End"
+                   Margin="0,0,0,30" />
+        </Grid>
+    </Grid>
+</ContentPage>

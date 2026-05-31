@@ -1,0 +1,17 @@
+2026/05/28 2:26:51 にビルドを開始しました。
+ログの詳細度は次のように設定されています: Normal。     1>ノード 1 上のプロジェクト "d:\nan-pure\Nanpla.csproj" (既定のターゲット)。
+     1>MarkupCompilePass1:
+         "C:\Users\amach\.nuget\packages\microsoft.windowsappsdk\1.5.240311000\buildTransitive\..\tools\net6.0\..\net472\XamlCompiler.exe" "obj\Debug\net8.0-windows10.0.19041.0\win10-x64\\input.json" "obj\Debug\net8.0-windows10.0.19041.0\win10-x64\\output.json"
+     1>C:\Users\amach\.nuget\packages\microsoft.windowsappsdk\1.5.240311000\buildTransitive\Microsoft.UI.Xaml.Markup.Compiler.interop.targets(590,9): error MSB3073: コマンド ""C:\Users\amach\.nuget\packages\microsoft.windowsappsdk\1.5.240311000\buildTransitive\..\tools\net6.0\..\net472\XamlCompiler.exe" "obj\Debug\net8.0-windows10.0.19041.0\win10-x64\\input.json" "obj\Debug\net8.0-windows10.0.19041.0\win10-x64\\output.json"" はコード 1 で終了しました。 [d:\nan-pure\Nanpla.csproj::TargetFramework=net8.0-windows10.0.19041.0]
+     1>プロジェクト "d:\nan-pure\Nanpla.csproj" (既定のターゲット) のビルドが終了しました -- 失敗。
+
+ビルドに失敗しました。
+
+       "d:\nan-pure\Nanpla.csproj" (既定のターゲット) (1) ->
+       (MarkupCompilePass1 ターゲット) -> 
+         C:\Users\amach\.nuget\packages\microsoft.windowsappsdk\1.5.240311000\buildTransitive\Microsoft.UI.Xaml.Markup.Compiler.interop.targets(590,9): error MSB3073: コマンド ""C:\Users\amach\.nuget\packages\microsoft.windowsappsdk\1.5.240311000\buildTransitive\..\tools\net6.0\..\net472\XamlCompiler.exe" "obj\Debug\net8.0-windows10.0.19041.0\win10-x64\\input.json" "obj\Debug\net8.0-windows10.0.19041.0\win10-x64\\output.json"" はコード 1 で終了しました。 [d:\nan-pure\Nanpla.csproj::TargetFramework=net8.0-windows10.0.19041.0]
+
+    0 個の警告
+    1 エラー
+
+経過時間 00:00:01.96
