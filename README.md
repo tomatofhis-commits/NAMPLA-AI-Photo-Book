@@ -1,4 +1,4 @@
-# NUMPLA-AI Photo Book (Yukata Ladys)
+# NAMPLA-AI Yukata Ladys
 
 .NET MAUI で開発された、美しいAI生成画像（浴衣美女）の報酬アルバム機能を備えたナンプレ（数独）ゲームアプリです。
 
@@ -46,4 +46,4 @@ URL: `https://tomatofhis-commits.github.io/NAMPLA-AI-Photo-Book/privacy-policy.h
 
 ## 著作権・ライセンス
 
-&copy; 2026 NUMPLA-AI Photo Book. All rights reserved.
+&copy; 2026 NAMPLA-AI Yukata Ladys. All rights reserved.

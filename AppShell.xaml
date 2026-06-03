@@ -3,10 +3,10 @@
        xmlns:views="clr-namespace:Nanpla.Views"
        x:Class="Nanpla.AppShell"
        Shell.FlyoutBehavior="Disabled"
-       Title="NUMPLA-AI Photo Book">
+       Title="NAMPLA-AI Yukata Ladys">
 
     <ShellContent
-        Title="NUMPLA-AI Photo Book"
+        Title="NAMPLA-AI Yukata Ladys"
         ContentTemplate="{DataTemplate views:TitlePage}"
         Route="TitlePage" />
 

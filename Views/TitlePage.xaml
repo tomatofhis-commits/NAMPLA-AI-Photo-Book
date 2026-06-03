@@ -3,7 +3,7 @@
              xmlns:viewmodels="clr-namespace:Nanpla.ViewModels"
              xmlns:models="clr-namespace:Nanpla.Models"
              x:Class="Nanpla.Views.TitlePage"
-             Title="NUMPLA-AI Photo Book"
+             Title="NAMPLA-AI Yukata Ladys"
              Shell.NavBarIsVisible="False">
 
     <ContentPage.BindingContext>
@@ -32,7 +32,7 @@
                              Padding="30">
             <!-- Title Logo -->
             <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
-                <Label Text="NUMPLA-AI Photo Book"
+                <Label Text="NAMPLA-AI"
                        FontSize="32"
                        FontAttributes="Bold"
                        TextColor="White"

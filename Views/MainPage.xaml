@@ -4,7 +4,7 @@
              xmlns:models="clr-namespace:Nanpla.Models"
              xmlns:converters="clr-namespace:Nanpla.Converters"
              x:Class="Nanpla.Views.MainPage"
-             Title="NUMPLA-AI Game"
+             Title="NAMPLA-AI Game"
              Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>

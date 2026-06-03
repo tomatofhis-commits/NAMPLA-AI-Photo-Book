@@ -11,10 +11,10 @@
 		<Nullable>enable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>NUMPLA-AI Photo Book</ApplicationTitle>
+		<ApplicationTitle>NAMPLA-AI Yukata Ladys</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.numpla_ai_photobook</ApplicationId>
+		<ApplicationId>com.tomatofhis.nampla_ai_yukata_ladys</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
