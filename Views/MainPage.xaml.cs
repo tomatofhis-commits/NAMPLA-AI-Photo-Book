@@ -51,8 +51,8 @@ namespace Nanpla.Views
 
             if (width > 0 && height > 0)
             {
-                // 余白（PagePadding, GridPadding, BorderPadding等）の合計: 左右で90px
-                double margin = 90;
+                // 余白（PagePadding, GridPadding, BorderPadding等 94px）に、左右の安全バッファを含めて110pxとする
+                double margin = 110;
                 double availableWidth = width - margin;
                 
                 // 縦方向のスペース（ヘッダー・フッター広告・ボタン領域）の確保: 250px
