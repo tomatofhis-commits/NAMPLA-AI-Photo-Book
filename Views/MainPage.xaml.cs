@@ -44,5 +44,40 @@ namespace Nanpla.Views
                 vm.SelectCellCommand.Execute(cell);
             }
         }
+
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+
+            if (width > 0 && height > 0)
+            {
+                // 余白（PagePadding, GridPadding, BorderPadding等）の合計: 左右で90px
+                double margin = 90;
+                double availableWidth = width - margin;
+                
+                // 縦方向のスペース（ヘッダー・フッター広告・ボタン領域）の確保: 250px
+                double availableHeight = height - 250;
+                
+                // 縦横の制限値の小さい方に合わせる（スクエア形状を維持）
+                double size = Math.Min(availableWidth, availableHeight);
+                
+                // デスクトップやタブレットで見苦しく巨大化しないよう、最大幅を360pxに制限
+                if (size > 360)
+                {
+                    size = 360;
+                }
+                
+                // 9マスのセルが均等に並び、描画の微小な小数点端数のズレを防ぐため、9の倍数に丸める
+                size = Math.Floor(size / 9) * 9;
+                
+                if (size > 0)
+                {
+                    BoardGrid.WidthRequest = size;
+                    BoardGrid.HeightRequest = size;
+                    BordersGrid.WidthRequest = size;
+                    BordersGrid.HeightRequest = size;
+                }
+            }
+        }
     }
 }

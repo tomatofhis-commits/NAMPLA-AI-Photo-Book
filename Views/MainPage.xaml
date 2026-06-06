@@ -88,7 +88,8 @@
                     
                     <Grid>
                         <!-- 81個のマス目 (Gridを使って自動余白によるズレを完全排除＆レスポンシブ化) -->
-                        <Grid BindableLayout.ItemsSource="{Binding FlattenedCells}"
+                        <Grid x:Name="BoardGrid"
+                              BindableLayout.ItemsSource="{Binding FlattenedCells}"
                               RowDefinitions="*,*,*,*,*,*,*,*,*"
                               ColumnDefinitions="*,*,*,*,*,*,*,*,*"
                               WidthRequest="{OnPlatform Default=315, WinUI=360}"
@@ -166,7 +167,8 @@
                         </Grid>
  
                         <!-- 3x3ブロックの太線枠（盤面と同一サイズに指定してズレを解消） -->
-                        <Grid RowDefinitions="*,*,*" ColumnDefinitions="*,*,*" 
+                        <Grid x:Name="BordersGrid"
+                              RowDefinitions="*,*,*" ColumnDefinitions="*,*,*" 
                                 InputTransparent="True"
                                 WidthRequest="{OnPlatform Default=315, WinUI=360}"
                                 HeightRequest="{OnPlatform Default=315, WinUI=360}"
