@@ -18,7 +18,7 @@ namespace Nanpla.Models
             {
                 for (int c = 0; c < 9; c++)
                 {
-                    Cells[r, c] = new NanplaCell();
+                    Cells[r, c] = new NanplaCell { Row = r, Column = c };
                 }
             }
             _solution = new int[9, 9];

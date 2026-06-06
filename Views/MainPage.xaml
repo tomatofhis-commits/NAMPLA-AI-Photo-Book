@@ -69,14 +69,14 @@
             <Grid Grid.Row="2" HorizontalOptions="Center" VerticalOptions="Center" Padding="10">
                 
                 <!-- 盤面の背景（半透明ガラス） -->
-                <Border WidthRequest="421"
-                        HeightRequest="421"
-                        StrokeThickness="2"
+                <Border StrokeThickness="2"
                         Stroke="#40FFFFFF"
                         Background="#20FFFFFF"
                         StrokeShape="RoundRectangle 8"
-                        Padding="35"
-                        Margin="0">
+                        Padding="15"
+                        Margin="0"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
                     <Border.Triggers>
                         <DataTrigger TargetType="Border" Binding="{Binding IsGameWonInternal}" Value="True">
                             <Setter Property="Opacity" Value="0" />
@@ -87,25 +87,22 @@
                     </Border.Shadow>
                     
                     <Grid>
-                        <!-- 81個のマス目 (FlexLayoutを使って自動余白によるズレを完全排除) -->
-                        <FlexLayout BindableLayout.ItemsSource="{Binding FlattenedCells}"
-                                    Wrap="Wrap"
-                                    Direction="Row"
-                                    JustifyContent="Start"
-                                    AlignItems="Start"
-                                    AlignContent="Start"
-                                    Margin="0"
-                                    WidthRequest="351"
-                                    HeightRequest="351"
-                                    HorizontalOptions="Center"
-                                    VerticalOptions="Center">
+                        <!-- 81個のマス目 (Gridを使って自動余白によるズレを完全排除＆レスポンシブ化) -->
+                        <Grid BindableLayout.ItemsSource="{Binding FlattenedCells}"
+                              RowDefinitions="*,*,*,*,*,*,*,*,*"
+                              ColumnDefinitions="*,*,*,*,*,*,*,*,*"
+                              WidthRequest="{OnPlatform Default=315, WinUI=360}"
+                              HeightRequest="{OnPlatform Default=315, WinUI=360}"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center"
+                              Margin="0">
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate>
                                     <!-- セルの外枠 (極細グレー) -->
-                                    <Border StrokeThickness="0.5"
+                                    <Border Grid.Row="{Binding Row}"
+                                            Grid.Column="{Binding Column}"
+                                            StrokeThickness="0.5"
                                             Stroke="#30FFFFFF"
-                                            WidthRequest="39"
-                                            HeightRequest="39"
                                             Background="#05FFFFFF"
                                             Padding="0">
                                         
@@ -117,7 +114,7 @@
                                                 <Setter Property="Background" Value="#6000E5FF" />
                                             </DataTrigger>
                                         </Border.Triggers>
-
+ 
                                         <!-- セルタップ認識 & コンテンツ表示 -->
                                         <Grid Padding="0">
                                             <Grid.GestureRecognizers>
@@ -166,15 +163,15 @@
                                     </Border>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
-                        </FlexLayout>
-
-                        <!-- 3x3ブロックの太線枠（CollectionViewと同一サイズに指定してズレを解消） -->
+                        </Grid>
+ 
+                        <!-- 3x3ブロックの太線枠（盤面と同一サイズに指定してズレを解消） -->
                         <Grid RowDefinitions="*,*,*" ColumnDefinitions="*,*,*" 
-                               InputTransparent="True"
-                               WidthRequest="351"
-                               HeightRequest="351"
-                               HorizontalOptions="Center"
-                               VerticalOptions="Center">
+                                InputTransparent="True"
+                                WidthRequest="{OnPlatform Default=315, WinUI=360}"
+                                HeightRequest="{OnPlatform Default=315, WinUI=360}"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center">
                             <Border Grid.Row="0" Grid.Column="0" StrokeThickness="1.5" Stroke="#80FFFFFF" Background="Transparent" />
                             <Border Grid.Row="0" Grid.Column="1" StrokeThickness="1.5" Stroke="#80FFFFFF" Background="Transparent" />
                             <Border Grid.Row="0" Grid.Column="2" StrokeThickness="1.5" Stroke="#80FFFFFF" Background="Transparent" />

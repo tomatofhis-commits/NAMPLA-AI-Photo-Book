@@ -13,6 +13,9 @@ namespace Nanpla.Models
         private bool _isSelected;
         private bool[] _notes = new bool[9];
 
+        public int Row { get; set; }
+        public int Column { get; set; }
+
         public int Value
         {
             get => _value;
