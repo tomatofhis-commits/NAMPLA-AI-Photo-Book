@@ -17,12 +17,13 @@
 		<ApplicationId>com.tomatofhis.nampla_ai_yukata_ladys</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0.1</ApplicationDisplayVersion>
-		<ApplicationVersion>2</ApplicationVersion>
+		<ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+		<ApplicationVersion>3</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::IsOSPlatform('windows'))">10.0.17763.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::IsOSPlatform('android'))">23.0</SupportedOSPlatformVersion>
 		<AndroidTargetSdkVersion>35</AndroidTargetSdkVersion>
+		<TargetFrameworkVersion>v15.0</TargetFrameworkVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::IsOSPlatform('windows'))">10.0.17763.0</TargetPlatformMinVersion>
 
 		<AssemblyName>Nanpla</AssemblyName>
